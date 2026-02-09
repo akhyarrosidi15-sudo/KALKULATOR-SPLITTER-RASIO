@@ -1,38 +1,22 @@
 <html lang="id">
 <head>
 <meta charset="utf-8">
-<title>Kalkulator Splitter Rasio | Fiber Optic Power Ratio</title>
+<title>Kalkulator Splitter Rasio | Fiber Optic</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<style>
-/* Tambahan kecil agar lebih nyaman di HP */
-@media (max-width: 576px){
-    h4{font-size:1.1rem;}
-}
-</style>
 </head>
 
 <body class="bg-light">
 
-<div class="container my-3 my-md-4">
+<div class="container my-4">
     <div class="row justify-content-center">
         <div class="col-12 col-md-10 col-lg-8">
 
-            <h4 class="mb-3 text-center text-md-start">
-                Kalkulator Splitter Rasio<br class="d-md-none">
-                <small class="text-muted">Fiber Optic Power Ratio Calculator</small>
+            <h4 class="mb-3 text-center">
+                Kalkulator Splitter Rasio<br>
+                <small class="text-muted">Fiber Optic Power Calculator</small>
             </h4>
-
-            <!-- ALERT LOGIN -->
-            <div class="alert alert-success border border-success small">
-                <b>Selamat Datang RIZK***</b><br>
-                Sesi Login Ke-18 Berhasil. Token akan berkurang setiap penggunaan layanan.
-                <div class="mt-1">
-                    <a href="#">Profil</a> | <a href="#">Logout</a>
-                </div>
-            </div>
 
             <!-- FORM -->
             <div class="card shadow-sm">
@@ -84,38 +68,37 @@
                         </select>
                     </div>
 
-                    <div class="d-grid d-md-block">
-                        <button class="btn btn-primary px-4" onclick="hitung()">HITUNG</button>
+                    <div class="d-grid">
+                        <button class="btn btn-primary" onclick="hitung()">HITUNG</button>
                     </div>
 
                 </div>
             </div>
 
             <!-- HASIL -->
-            <div class="card mt-4 shadow-sm d-none" id="hasil">
+            <div class="card mt-4 shadow-sm d-none" id="hasilBox">
                 <div class="card-body">
-                    <div class="mb-2">
-                        <b>REDAMAN ODP</b><br class="d-md-none">
-                        <span class="text-danger fw-bold" id="redaman"></span>
+
+                    <div class="mb-3">
+                        <b>REDAMAN ODP</b><br>
+                        <span class="text-danger fw-bold fs-5" id="redaman"></span>
                     </div>
+
                     <div>
-                        <b>SISA LASER</b><br class="d-md-none">
-                        <span class="text-success fw-bold" id="sisa"></span>
+                        <b>SISA LASER</b><br>
+                        <span class="text-success fw-bold fs-5" id="sisa"></span>
+                        <div class="mt-2">
+                            <button class="btn btn-outline-secondary btn-sm" onclick="gunakanSisa()">
+                                ⬆️ Gunakan sebagai Input Laser
+                            </button>
+                        </div>
                     </div>
+
                 </div>
             </div>
 
-            <!-- CATATAN -->
-            <div class="alert alert-warning mt-3 small">
-                Catatan: hasil belum termasuk loss splicing, kabel, fast connector,
-                barrel, pigtail/patchcord.
-            </div>
-
-            <!-- FOOTER -->
-            <div class="text-muted small text-center mt-3">
-                Kalkulator rasio ini telah digunakan
-                <b><span id="counter"></span>x</b><br>
-                <span class="fw-semibold text-primary">by WIFI KOIN AKHFI</span>
+            <div class="text-center mt-4 text-muted small">
+                by <b>WIFI KOIN AKHFI</b>
             </div>
 
         </div>
@@ -123,9 +106,7 @@
 </div>
 
 <script>
-/* COUNTER */
-let counter = localStorage.getItem("bilhanet_counter") || 75451;
-document.getElementById("counter").innerText = counter;
+let sisaLaserGlobal = 0;
 
 function hitung(){
     let laser = parseFloat(document.getElementById("laser").value);
@@ -140,17 +121,24 @@ function hitung(){
     let totalLoss = ratioLoss + plcLoss;
     let sisa = laser - totalLoss;
 
+    sisaLaserGlobal = sisa;
+
     document.getElementById("redaman").innerText =
-        totalLoss.toFixed(2) + " dB (Referensi BILHANET)";
+        totalLoss.toFixed(2) + " dB";
 
     document.getElementById("sisa").innerText =
         sisa.toFixed(2) + " dB";
 
-    document.getElementById("hasil").classList.remove("d-none");
+    document.getElementById("hasilBox").classList.remove("d-none");
+}
 
-    counter++;
-    localStorage.setItem("bilhanet_counter", counter);
-    document.getElementById("counter").innerText = counter;
+function gunakanSisa(){
+    if(sisaLaserGlobal <= 0){
+        alert("Sisa laser tidak valid");
+        return;
+    }
+    document.getElementById("laser").value = sisaLaserGlobal.toFixed(2);
+    window.scrollTo({top:0, behavior:"smooth"});
 }
 </script>
 
